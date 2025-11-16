@@ -25,7 +25,7 @@ def get_history():
     if mp_id:
         df = df[df['voter_id'].astype(str) == str(mp_id)]
     
-    result = df[['start_date','title','id','voter_id','voter_name','vote_option','voter_party']].to_dict(orient='records')
+    result = df[['start_date','title','id','voter_id','voter_name','vote_option','voter_party']].fillna('').to_dict(orient='records')
     return jsonify(result), 200
 
 @app.route('/api/get_df', methods=['POST'])
@@ -35,7 +35,7 @@ def get_df():
     sessionId = payload.get("sessionId")
     """Execute a GraphQL query sent in the POST body as JSON { "query": "..."}"""
     df = get_data(sessionId)
-    result = df[['voter_name','vote_category','voter_id','voter_party']].to_dict(orient='records')
+    result = df[['voter_name','vote_category','voter_id','voter_party']].fillna('').to_dict(orient='records')
     return jsonify(result), 200
 
 @app.route('/api/get_session', methods=['GET'])  # ✅ เปลี่ยนเป็น GET
@@ -67,7 +67,7 @@ def get_parties():
         values='count',
         aggfunc='sum',
         fill_value=0
-    ).reset_index()
+    ).reset_index().fillna('')
 
     # เปลี่ยนชื่อคอลัมน์ให้เป็นอังกฤษและ lowercase
     pivot_df = pivot_df.rename(columns={
