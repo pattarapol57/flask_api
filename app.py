@@ -47,8 +47,7 @@ def get_session():
             'end_date': 'date',
             'nickname': 'billName'  # ✅ แก้จาก 'title' เป็น 'nickname'
         }) \
-        .drop_duplicates().fillna('')
-    
+        .drop_duplicates().dropna(subset=['nickname']).fillna('')
     result = df.to_dict(orient='records')  # ✅ แก้ typo: orient
     return jsonify(result), 200
 
