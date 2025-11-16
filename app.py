@@ -42,12 +42,13 @@ def get_df():
 def get_session():
     """Get all voting sessions"""
     df = get_data(id=None)
+    df = df[df['nickname']!='มติเลือกนายกรัฐมนตรีคนที่ 32']
     df = df[['id','nickname','description','result','end_date']] \
         .rename(columns={
             'end_date': 'date',
             'nickname': 'billName'  # ✅ แก้จาก 'title' เป็น 'nickname'
         }) \
-        .drop_duplicates().dropna(subset=['nickname']).fillna('')
+        .drop_duplicates().dropna(subset=['billName']).fillna('')
     result = df.to_dict(orient='records')  # ✅ แก้ typo: orient
     return jsonify(result), 200
 
